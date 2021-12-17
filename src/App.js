@@ -1,6 +1,6 @@
 import './styles/App.css';
 import twitterLogo from './assets/twitter-logo.svg';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import myEpicNft from './utils/MyEpicNFT.json';
 import MetaMaskSVG from './assets/MetaMaskSVG.js';
 import { ethers } from 'ethers';
@@ -68,8 +68,7 @@ const App = () => {
 			console.log(error);
 		}
 	};
-
-	const checkNFTCount = async () => {
+	const checkNFTCount = useCallback(async () => {
 		try {
 			const { ethereum } = window;
 
@@ -103,7 +102,7 @@ const App = () => {
 			console.log('check nftcount did not run');
 			console.log(error);
 		}
-	};
+	}, [currentAccount]);
 
 	const setupEventListener = async () => {
 		// Most of this looks the same as our function askContractToMintNft
@@ -193,7 +192,7 @@ const App = () => {
 	useEffect(() => {
 		checkIfWalletIsConnected();
 		checkNFTCount();
-	}, []);
+	}, [checkNFTCount]);
 	return (
 		<div className='App'>
 			<div className='container'>
@@ -233,7 +232,7 @@ const App = () => {
 				<div className='message-container'>
 					<h2 className='message-header gradient-text'>Message Center:</h2>
 					<p className='message-text'>{messageText}</p>
-					{true && (
+					{transactionLink && (
 						<a
 							className='message-link gradient-text-red'
 							href={transactionLink}
