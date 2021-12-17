@@ -19,13 +19,16 @@ const App = () => {
 	const [currentAccount, setCurrentAccount] = useState('');
 	const [currentNFTCount, setCurrentNFTCount] = useState(0);
 	const [isLoading, setIsLoading] = useState(false);
-	const [messageText, setMessageText] = useState('Well hello there...');
+	const [messageText, setMessageText] = useState(
+		'Hello there crypto crusader...'
+	);
 	const [transactionLink, setTransactionLink] = useState('');
 
 	const checkIfWalletIsConnected = async () => {
 		const { ethereum } = window;
 		if (!ethereum) {
 			console.log('Make sure you have MetaMask!');
+			setMessageText('Make sure you have MetaMask!');
 			return;
 		} else {
 			console.log('We have the ethereum object', ethereum);
@@ -82,7 +85,8 @@ const App = () => {
 				);
 				let nftCount = await connectedContract.getTotalNFTsMintedCount();
 				setCurrentNFTCount(nftCount.toNumber());
-			} else if (ethereum && !currentAccount) {
+			} else if (!ethereum || !currentAccount) {
+				console.log('there is no wallet - getting contract from etherscan');
 				const network = ethers.providers.getNetwork('rinkeby');
 				const provider = new ethers.providers.EtherscanProvider(
 					network,
@@ -102,6 +106,7 @@ const App = () => {
 			console.log('check nftcount did not run');
 			console.log(error);
 		}
+		console.log('check nft count ran');
 	}, [currentAccount]);
 
 	const setupEventListener = async () => {
