@@ -19,7 +19,7 @@ const App = () => {
 	const [currentAccount, setCurrentAccount] = useState('');
 	const [currentNFTCount, setCurrentNFTCount] = useState(0);
 	const [isLoading, setIsLoading] = useState(false);
-	const [messageText, setMessageText] = useState('Well hello there');
+	const [messageText, setMessageText] = useState('Well hello there...');
 	const [transactionLink, setTransactionLink] = useState('');
 
 	const checkIfWalletIsConnected = async () => {
@@ -233,9 +233,12 @@ const App = () => {
 				<div className='message-container'>
 					<h2 className='message-header gradient-text'>Message Center:</h2>
 					<p className='message-text'>{messageText}</p>
-					{transactionLink && (
-						<a href={transactionLink} alt='link to your transaction'>
-							See Transaction
+					{true && (
+						<a
+							className='message-link gradient-text-red'
+							href={transactionLink}
+							alt='link to your transaction'>
+							Go To Transaction!
 						</a>
 					)}
 				</div>
