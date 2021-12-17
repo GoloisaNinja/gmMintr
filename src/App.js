@@ -11,6 +11,8 @@ const RARIBLE_LINK = 'https://rinkeby.rarible.com/token/';
 const RARIBLE_COLLECTION = 'https://rinkeby.rarible.com/collection/';
 const TOTAL_MINT_COUNT = 50;
 
+const ETHERSCANAPI = process.env.REACT_APP_ETHERSCAN_API_KEY;
+
 const CONTRACT_ADDRESS = '0x6a1942C7402440B8Fb276f5E2dc017FF1a6EB9DC';
 
 const App = () => {
@@ -71,7 +73,7 @@ const App = () => {
 		try {
 			const { ethereum } = window;
 
-			if (ethereum) {
+			if (ethereum && currentAccount) {
 				const provider = new ethers.providers.Web3Provider(ethereum);
 				const signer = provider.getSigner();
 				const connectedContract = new ethers.Contract(
@@ -81,10 +83,24 @@ const App = () => {
 				);
 				let nftCount = await connectedContract.getTotalNFTsMintedCount();
 				setCurrentNFTCount(nftCount.toNumber());
+			} else if (ethereum && !currentAccount) {
+				const network = ethers.providers.getNetwork('rinkeby');
+				const provider = new ethers.providers.EtherscanProvider(
+					network,
+					ETHERSCANAPI
+				);
+				const connectedContract = new ethers.Contract(
+					CONTRACT_ADDRESS,
+					myEpicNft.abi,
+					provider
+				);
+				let nftCount = await connectedContract.getTotalNFTsMintedCount();
+				setCurrentNFTCount(nftCount.toNumber());
 			} else {
 				console.log("Ethereum object doesn't exist!");
 			}
 		} catch (error) {
+			console.log('check nftcount did not run');
 			console.log(error);
 		}
 	};
