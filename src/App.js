@@ -51,7 +51,7 @@ const App = () => {
 		try {
 			const { ethereum } = window;
 			if (!ethereum) {
-				setMessageText(`Get MetaMask! This app requires it!`);
+				setMessageText(`On mobile? Try gmMintr in the MetaMask browser`);
 				return;
 			}
 			const accounts = await ethereum.request({
