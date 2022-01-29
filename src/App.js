@@ -27,8 +27,12 @@ const App = () => {
 	const checkIfWalletIsConnected = async () => {
 		const { ethereum } = window;
 		if (!ethereum) {
-			console.log('Make sure you have MetaMask!');
-			setMessageText('Make sure you have MetaMask!');
+			console.log(
+				`Can't connect? Try navigating to gmMintr using the MetaMask browser`
+			);
+			setMessageText(
+				`Can't connect? Try navigating to gmMintr using the MetaMask browser`
+			);
 			return;
 		} else {
 			console.log('We have the ethereum object', ethereum);
@@ -51,7 +55,9 @@ const App = () => {
 		try {
 			const { ethereum } = window;
 			if (!ethereum) {
-				setMessageText(`On mobile? Try gmMintr in the MetaMask browser`);
+				setMessageText(
+					`Can't connect? Try navigating to gmMintr using the MetaMask browser`
+				);
 				return;
 			}
 			const accounts = await ethereum.request({
@@ -185,14 +191,17 @@ const App = () => {
 		window.open(`${RARIBLE_COLLECTION}${CONTRACT_ADDRESS}`);
 	};
 	// Render Methods
-	const renderNotConnectedContainer = () => (
-		<button
-			onClick={connectWallet}
-			disabled={currentNFTCount >= TOTAL_MINT_COUNT}
-			className='cta-button connect-wallet-button'>
-			Connect Wallet
-		</button>
-	);
+	const renderNotConnectedContainer = () => {
+		const { ethereum } = window;
+		return (
+			<button
+				onClick={connectWallet}
+				disabled={currentNFTCount >= TOTAL_MINT_COUNT || !ethereum}
+				className='cta-button connect-wallet-button'>
+				Connect Wallet
+			</button>
+		);
+	};
 
 	useEffect(() => {
 		checkIfWalletIsConnected();
